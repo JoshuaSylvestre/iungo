@@ -15,3 +15,9 @@
 # To run both, simultaneously
 
 - work in progress. Docker?
+
+# Directory contents
+
+- frontend: React application
+- backend: Express application
+- misc: Balsamiq mockup project and PDF
