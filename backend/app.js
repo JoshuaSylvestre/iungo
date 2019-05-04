@@ -6,11 +6,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const webpack = require('webpack');
 const faker = require('faker');
+var cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+app.use(cors());
 
 const port = 5000;
 
@@ -18,10 +20,14 @@ const { AccessToken } = require('twilio').jwt;
 
 const { VideoGrant } = AccessToken;
 
+// const twilioAccountSid = 'AC0663d3c2fef523124dc0ef25943d5541';
+// const twilioApiKey = 'SK449bc1cb1b6ba206e1a80d9192c00ea3';
+// const twilioApiSecret = 'uSxR3mNtPx5ZBWbGvIzIxDNrG1SD96p9';
+
 // Used when generating any kind of tokens
-const twilioAccountSid = 'AC0663d3c2fef523124dc0ef25943d5541';
-const twilioApiKey = 'SK7bfe56fbf4aa55d5f3780ca2bcabd246';
-const twilioApiSecret = 'LtTAAubyP1MQzFPgO6Y8N50Rwl0YZTHN';
+const twilioAccountSid = '';
+const twilioApiKey = '';
+const twilioApiSecret = '';
 
 // Endpoint to generate access token
 app.get('/', (request, response) => {
@@ -33,7 +39,6 @@ app.get('/', (request, response) => {
     twilioApiKey,
     twilioApiSecret,
   );
-  console.log('token info:' + token.twilioAccountSid);
 
   // Assign the generated identity to the token
   token.identity = identity;
@@ -42,12 +47,14 @@ app.get('/', (request, response) => {
   // Grant token access to the Video API features
   token.addGrant(grant);
 
-  console.log(token.toJwt());
+  // console.log(token.toJwt());
+  // console.log('token info:' + token);
+  // console.log(identity);
 
   // Serialize the token to a JWT string and include it in a JSON response
   response.send({
-    identity,
-    token,
+    identity: identity,
+    token: token.toJwt(),
   });
 });
 

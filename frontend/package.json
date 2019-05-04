@@ -8,6 +8,7 @@
     "material-ui": "^0.20.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-mic": "^12.4.1",
     "react-scripts": "0.9.5",
     "serve": "^11.0.0",
     "twilio-video": "^2.0.0-beta9"

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Video from 'twilio-video';
+import { ReactMic } from 'react-mic';
 import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -17,23 +18,47 @@ export default class VideoComponent extends Component {
             previewTracks: null,
             localMediaAvailable: false, /* Represents the availability of a LocalAudioTrack(microphone) and a LocalVideoTrack(camera) */
             hasJoinedRoom: false,
-            activeRoom: null // Track the current active room
+            activeRoom: null, // Track the current active room
+            record: false
         };
 
         this.joinRoom = this.joinRoom.bind(this);
         this.handleRoomNameChange = this.handleRoomNameChange.bind(this);
         this.roomJoined = this.roomJoined.bind(this);
+        this.leaveRoom = this.leaveRoom.bind(this);
+        this.detachParticipantTracks = this.detachParticipantTracks.bind(this);
     }
 
     componentDidMount() {
-        axios.get('/').then(results => {
-            // console.log(results);
+        axios.get('http://localhost:5000/').then(results => {
             /*
         Make an API call to get the token and identity(fake name) and  update the corresponding state variables.
             */
             const { identity, token } = results.data;
-            this.setState({ identity, token });
+            // console.log(token);
+            this.setState({ token: token });
+            this.setState({ identity: identity });
         });
+    }
+
+    startRecording(){
+        this.setState({
+            record: true
+        });
+    }
+
+    stopRecording(){
+        this.setState({
+            record: false
+        });
+    }
+
+    onData(recordedBlob) {
+        console.log('chunk of real-time data is: ', recordedBlob);
+    }
+
+    onStop(recordedBlob) {
+        console.log('recordedBlob is: ', recordedBlob);
     }
 
     handleRoomNameChange(e) {
@@ -43,6 +68,8 @@ export default class VideoComponent extends Component {
     }
 
     joinRoom() {
+        this.startRecording();
+
         /* 
      Show an error message on room name text field if user tries         joining a room without providing a room name. This is enabled by setting `roomNameErr` to true
        */
@@ -74,12 +101,19 @@ Connect to a room by providing the token and connection    options that include 
         });
     }
 
-    // Attach the Participant's Tracks to the DOM.
-    attachParticipantTracks(participant, container) {
-        var tracks = Array.from(participant.tracks.values());
-        this.attachTracks(tracks, container);
+    attachParticipantTracks(participant, container, isLocal) {
+        var tracks = this.getTracks(participant);
+        this.attachTracks(tracks, container, isLocal);
     }
 
+    getTracks(participant) {
+        return Array.from(participant.tracks.values()).filter(function (publication) {
+            return publication.track;
+        }).map(function (publication) {
+            return publication.track;
+        });
+    }
+    
     roomJoined(room) {
         // Called when a participant joins a room
         console.log("Joined as '" + this.state.identity + "'");
@@ -94,6 +128,95 @@ Connect to a room by providing the token and connection    options that include 
         if (!previewContainer.querySelector('video')) {
             this.attachParticipantTracks(room.localParticipant, previewContainer);
         }
+
+        // Attach the Tracks of the room's participants.
+        room.participants.forEach(participant => {
+            console.log("Already in Room: '" + participant.identity + "'");
+            var previewContainer = this.refs.remoteMedia;
+            this.attachParticipantTracks(participant, previewContainer);
+        });
+
+        // Participant joining room
+        room.on('participantConnected', participant => {
+            console.log("Joining: '" + participant.identity + "'");
+        });
+        room.on('participantDisconnected', this.onParticipantDisconnected);
+        room.on('trackUnsubscribed', this.onParticipantUnpublishedTrack);
+
+        // Attach participant’s tracks to DOM when they add a track
+        room.on('trackAdded', (track, participant) => {
+            console.log(participant.identity + ' added track: ' + track.kind);
+            var previewContainer = this.refs.remoteMedia;
+            this.attachTracks([track], previewContainer);
+        });
+
+        // Detach participant’s track from DOM when they remove a track.
+        room.on('trackRemoved', (track, participant) => {
+            this.log(participant.identity + ' removed track: ' + track.kind);
+            this.detachTracks([track]);
+        });
+
+        // Detach all participant’s track when they leave a room.
+        room.on('participantDisconnected', participant => {
+            console.log("Participant '" + participant.identity + "' left the room");
+            this.detachParticipantTracks(participant);
+        });
+
+        // Once the local participant leaves the room, detach the Tracks
+        // of all other participants, including that of the LocalParticipant.
+        room.on('disconnected', () => {
+            if (this.state.previewTracks) {
+                this.state.previewTracks.forEach(track => {
+                    track.stop();
+                });
+            }
+            this.detachParticipantTracks(room.localParticipant);
+            room.participants.forEach(this.detachParticipantTracks);
+            this.state.activeRoom = null;
+            this.setState({ hasJoinedRoom: false, localMediaAvailable: false });
+        });
+    }
+
+    onParticipantDisconnected(participant, error) {
+        // When a (remote) participant disconnects, detach the assiciated tracks
+        this.detachParticipantTracks(participant);
+    }
+
+    detachTracks(tracks) {
+        for (let track of tracks) {
+            const htmlElements = track.detach();
+            for (let htmlElement of htmlElements) {
+                htmlElement.remove();
+            }
+        }
+    }
+
+    onParticipantUnpublishedTrack(track, trackPublication) {
+        this.detachTracks([track]);
+    }
+
+    detachParticipantTracks(participant) {
+        var tracks = this.getTracks(participant);
+        this.detachTracks(tracks);
+    }
+
+    leaveRoom() {
+        this.stopRecording();
+        this.state.activeRoom.disconnect();
+        this.setState({ hasJoinedRoom: false, localMediaAvailable: false });
+    }
+
+    detachTracks(tracks) {
+        // tracks.forEach(track => {
+        //     track.detach().forEach(detachedElement => {
+        //         detachedElement.remove();
+        //     });
+        // });
+    }
+
+    detachParticipantTracks(participant) {
+        var tracks = Array.from(participant.tracks.values());
+        this.detachTracks(tracks);
     }
 
     render() {
@@ -109,7 +232,7 @@ Connect to a room by providing the token and connection    options that include 
          show `Leave Room` button.
         */
         let joinOrLeaveRoomButton = this.state.hasJoinedRoom ? (
-            <RaisedButton label="Leave Room" secondary={true} onClick={() => alert("Leave Room")} />) : (
+            <RaisedButton label="Leave Room" secondary={true} onClick={this.leaveRoom} />) : (
                 <RaisedButton label="Join Room" primary={true} onClick={this.joinRoom} />);
         return (
             <MuiThemeProvider>
@@ -117,6 +240,17 @@ Connect to a room by providing the token and connection    options that include 
                     <CardText>
                         <div className="flex-container">
                             {showLocalTrack} {/* Show local track if available */}
+                            <div>
+                                <ReactMic
+                                    record={this.state.record}
+                                    className="sound-wave"
+                                    onStop={this.onStop}
+                                    onData={this.onData}
+                                    strokeColor="#000000"
+                                    backgroundColor="#00d8ff" />
+                                {/* <button onTouchTap={this.startRecording} type="button">Start</button>
+                                <button onTouchTap={this.stopRecording} type="button">Stop</button> */}
+                            </div>
                             <div className="flex-item">
                                 {/* 
     The following text field is used to enter a room name. It calls  `handleRoomNameChange` method when the text changes which sets the `roomName` variable initialized in the state.
