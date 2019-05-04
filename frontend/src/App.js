@@ -1,4 +1,6 @@
+/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
+import VideoComponent from './components/VideoComponent';
 import logo from './logo.svg';
 import './App.css';
 
@@ -9,9 +11,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('/users')
-      .then(res => res.json())
-      .then(users => this.setState({ users }));
+    // fetch('/users')
+    //   .then(res => res.json())
+    //   .then(users => this.setState({ users }));
   }
 
   render() {
@@ -28,7 +30,8 @@ class App extends Component {
           and save to reload.
         </p>
         <h1>
-          {users.map(user => <div key={user.id}>{user.username}</div>)}
+          {/* {users.map(user => <div key={user.id}>{user.username}</div>)} */}
+          <VideoComponent />
         </h1>
       </div>
     );

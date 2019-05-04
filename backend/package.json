@@ -6,12 +6,18 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
     "ejs": "^2.5.9",
     "express": "~4.16.0",
+    "faker": "^4.1.0",
     "http-errors": "~1.6.2",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "twilio": "^3.30.3",
+    "twilio-video": "^2.0.0-beta9",
+    "webpack": "^4.30.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
