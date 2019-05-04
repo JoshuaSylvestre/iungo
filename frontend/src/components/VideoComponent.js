@@ -30,10 +30,8 @@ export default class VideoComponent extends Component {
     }
 
     componentDidMount() {
+        // Used for twilio token authorization
         axios.get('http://localhost:5000/').then(results => {
-            /*
-        Make an API call to get the token and identity(fake name) and  update the corresponding state variables.
-            */
             const { identity, token } = results.data;
             // console.log(token);
             this.setState({ token: token });

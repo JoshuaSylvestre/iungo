@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import VideoComponent from './components/VideoComponent';
+import Dictaphone from './components/Dictaphone';
 import logo from './logo.svg';
 import './App.css';
 
@@ -32,6 +33,7 @@ class App extends Component {
         <h1>
           {/* {users.map(user => <div key={user.id}>{user.username}</div>)} */}
           <VideoComponent />
+          <Dictaphone />
         </h1>
       </div>
     );

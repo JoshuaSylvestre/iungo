@@ -20,10 +20,6 @@ const { AccessToken } = require('twilio').jwt;
 
 const { VideoGrant } = AccessToken;
 
-// const twilioAccountSid = 'AC0663d3c2fef523124dc0ef25943d5541';
-// const twilioApiKey = 'SK449bc1cb1b6ba206e1a80d9192c00ea3';
-// const twilioApiSecret = 'uSxR3mNtPx5ZBWbGvIzIxDNrG1SD96p9';
-
 // Used when generating any kind of tokens
 const twilioAccountSid = '';
 const twilioApiKey = '';
