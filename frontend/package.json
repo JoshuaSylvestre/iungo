@@ -4,16 +4,12 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
-    "faker": "^4.1.0",
-    "material-ui": "^0.20.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-mic": "^12.4.1",
     "react-scripts": "0.9.5",
     "react-speech-recognition": "^2.0.1",
     "serve": "^11.0.0",
-    "translate": "^1.1.0",
-    "twilio-video": "^2.0.0-beta9"
+    "translate": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
