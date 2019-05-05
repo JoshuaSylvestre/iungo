@@ -10,7 +10,7 @@ const propTypes = {
 };
 
 const options = {
-    autoStart: false
+    autoStart: true
 }
 
 const Dictaphone = ({

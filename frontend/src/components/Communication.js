@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import { Link } from 'react-router-dom';
 import ToggleFullScreen from './ToggleFullScreen';
 import Dictaphone from './Dictaphone';
+import SpeechRecognition from 'react-speech-recognition';
 
 const Communication = props =>
   <div className="auth">
@@ -53,7 +54,8 @@ const Communication = props =>
       <p>Please, try another room!</p>
       <Link  className="primary-button" to="/">OK</Link>
     </div>
-    <Dictaphone />
+    {/* <Dictaphone /> */}
+    {/* <span>{props.finalTranscript || 'no audio'}</span> */}
     <div className="waiting">
       <p><span>Waiting for someone to join this room:&nbsp;</span><a href={window.location.href}>{window.location.href}</a><br/>
       <span className="remote-left">The remote side hung up.</span></p>
@@ -73,4 +75,7 @@ Communication.propTypes = {
   handleInvitation: PropTypes.func.isRequired
 };
 
-export default Communication;
+export default SpeechRecognition({
+  autoStart: true,
+  continuous: true
+})(Communication);
