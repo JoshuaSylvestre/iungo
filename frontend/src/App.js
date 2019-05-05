@@ -8,12 +8,6 @@ class App extends Component {
     this.state = { users: [] };
   }
 
-  componentDidMount() {
-    fetch('/users')
-      .then(res => res.json())
-      .then(users => this.setState({ users }));
-  }
-
   render() {
     const { users } = this.state;
     return (
@@ -27,9 +21,6 @@ class App extends Component {
           <code>src/App.js</code>
           and save to reload.
         </p>
-        <h1>
-          {users.map(user => <div key={user.id}>{user.username}</div>)}
-        </h1>
       </div>
     );
   }
