@@ -5,7 +5,12 @@
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "0.9.5",
+    "react-speech-recognition": "^2.0.1",
+    "redux": "^4.0.1",
+    "remarkable": "^1.7.1",
     "serve": "^11.0.0",
     "socket.io-client": "^2.2.0"
   },
