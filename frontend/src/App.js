@@ -24,7 +24,7 @@ class App extends Component {
     const { users } = this.state;
     return (
       <div className="App">        
-      <h1>Start speaking, your text will appear on the screen below:</h1>
+      <h1>Start speaking, your text will appear on the screen after your first pause:</h1>
         <h1>
           <span style={{color: 'black'}}>{this.props.finalTranscript}</span>
         </h1>
@@ -33,4 +33,4 @@ class App extends Component {
   }
 }
 
-export default  SpeechRecognition(options)(App);
+export default SpeechRecognition(options)(App);
