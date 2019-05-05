@@ -1,0 +1,25 @@
+version: "3"
+services:
+  backend:
+    container_name: backend
+    restart: always
+    build: backend/
+    ports:
+      - "5000:5000"
+    networks:
+      - appnet
+  frontend:
+    container_name: frontend
+    restart: always
+    build: frontend/
+    ports:
+      - "5001:8080"
+    networks:
+      - appnet
+    links:
+      - backend
+    depends_on:
+      - backend
+networks:
+  appnet:
+    driver: bridge
