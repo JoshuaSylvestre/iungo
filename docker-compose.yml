@@ -1,19 +1,21 @@
 version: "3"
 services:
   backend:
-    container_name: backend
+    container_name: iungo-backend
     restart: always
     build: backend/
+    image: steevejoseph/iungo-backend
     ports:
       - "5000:5000"
     networks:
       - appnet
   frontend:
-    container_name: frontend
+    container_name: iungo-frontend
     restart: always
     build: frontend/
+    image: steevejoseph/iungo-frontend
     ports:
-      - "5001:8080"
+      - "80:8080"
     networks:
       - appnet
     links:
