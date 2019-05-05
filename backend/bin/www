@@ -11,6 +11,7 @@
 const debug = require('debug')('iungo:server');
 const http = require('http');
 const app = require('../app');
+const setupSocket = require('./setup-socket');
 
 /**
  * Get port from environment and store in Express.
@@ -30,6 +31,7 @@ const server = http.createServer(app);
  */
 
 server.listen(port);
+setupSocket(server);
 server.on('error', onError);
 server.on('listening', onListening);
 
