@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-fe": "cd client && npm run build",
+    "build-fe": "cd client && npm i && npm run build",
     "start": "npm run build-fe && node ./bin/www"
   },
   "dependencies": {
@@ -27,6 +27,5 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
     "nodemon": "^1.19.0"
-  },
-  "heroku-prebuild": "cd client && npm i"
+  }
 }
