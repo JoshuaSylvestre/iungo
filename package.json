@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-fe": "cd client && npm i && npm run build",
-    "start": "npm run build-fe && node ./bin/www"
+    "build-fe": "cd client && npm run build",
+    "start": "npm run build-fe && node ./bin/www",
+    "heroku-prebuild": "npm i --prefix client"
   },
   "dependencies": {
     "compression": "^1.7.4",
