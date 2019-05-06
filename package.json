@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run build --prefix client && node ./bin/www",
-    "heroku-prebuild": "npm i --prefix client"
+    "start": "node ./bin/www",
+    "heroku-prebuild": "npm i --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "compression": "^1.7.4",
