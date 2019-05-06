@@ -37,11 +37,11 @@ const options = {
  */
 
 let server;
-if(process.env.NODE_ENV === 'production'){
-  server = https.createServer(options, app);
-}else{
+// if(process.env.NODE_ENV === 'production'){
+  // server = https.createServer(options, app);
+// }else{
   server = http.createServer(app);
-}
+// }
 
 /**
  * Listen on provided port, on all network interfaces.
