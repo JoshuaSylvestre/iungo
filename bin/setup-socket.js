@@ -1,13 +1,6 @@
-const http = require('http');
-// const https = require('https');
 const sio = require('socket.io');
 
-const setupSocket = (server) => {
-  const options = {
-    // key: fs.readFileSync(__dirname + '/rtc-video-room-key.pem'),
-    // cert: fs.readFileSync(__dirname + '/rtc-video-room-cert.pem')
-  };
-
+const setupSocket = (server) => {  
   // these two line no longer needed, server should be passed in by /bin/www
   // const port = process.env.PORT || 5000;
   // const server = http.createServer(app).listen(port);
