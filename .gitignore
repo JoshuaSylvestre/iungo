@@ -126,3 +126,4 @@ deps/v8/third_party/eu-strip/
 
 .DS_Store
 node_modules
+client/node_modules
